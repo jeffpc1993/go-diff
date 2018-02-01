@@ -31,7 +31,7 @@ func TestPatchString(t *testing.T) {
 				Length1: 18,
 				Length2: 17,
 
-				diffs: []Diff{
+				Diffs: []Diff{
 					{DiffEqual, "jump"},
 					{DiffDelete, "s"},
 					{DiffInsert, "ed"},
@@ -86,15 +86,15 @@ func TestPatchFromText(t *testing.T) {
 		}
 	}
 
-	diffs := []Diff{
+	Diffs := []Diff{
 		{DiffDelete, "`1234567890-=[]\\;',./"},
 		{DiffInsert, "~!@#$%^&*()_+{}|:\"<>?"},
 	}
 
 	patches, err := dmp.PatchFromText("@@ -1,21 +1,21 @@\n-%601234567890-=%5B%5D%5C;',./\n+~!@#$%25%5E&*()_+%7B%7D%7C:%22%3C%3E?\n")
 	assert.Len(t, patches, 1)
-	assert.Equal(t, diffs,
-		patches[0].diffs,
+	assert.Equal(t, Diffs,
+		patches[0].Diffs,
 	)
 	assert.Nil(t, err)
 }
@@ -193,12 +193,12 @@ func TestPatchMakeAndPatchToText(t *testing.T) {
 	text1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut risus et enim consectetur convallis a non ipsum. Sed nec nibh cursus, interdum libero vel."
 	text2 = "Lorem a ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut risus et enim consectetur convallis a non ipsum. Sed nec nibh cursus, interdum liberovel."
 
-	diffs := dmp.DiffMain(text1, text2, true)
+	Diffs := dmp.DiffMain(text1, text2, true)
 	// Additional check that the diff texts are equal to the originals even if we are using DiffMain with checklines=true #29
-	assert.Equal(t, text1, dmp.DiffText1(diffs))
-	assert.Equal(t, text2, dmp.DiffText2(diffs))
+	assert.Equal(t, text1, dmp.DiffText1(Diffs))
+	assert.Equal(t, text2, dmp.DiffText2(Diffs))
 
-	patches := dmp.PatchMake(text1, diffs)
+	patches := dmp.PatchMake(text1, Diffs)
 
 	actual := dmp.PatchToText(patches)
 	assert.Equal(t, "@@ -1,14 +1,16 @@\n Lorem \n+a \n ipsum do\n@@ -148,13 +148,12 @@\n m libero\n- \n vel.\n", actual)
